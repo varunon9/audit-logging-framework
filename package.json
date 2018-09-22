@@ -1,0 +1,33 @@
+{
+  "name": "audit-logging",
+  "version": "1.0.0",
+  "description": "An audit logging framework for MySql database.",
+  "main": "./bin/www",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/varunon9/audit-logging-framework.git"
+  },
+  "keywords": [
+    "audit-logging",
+    "nodejs",
+    "mongodb",
+    "kafka",
+    "mysql",
+    "mongoose",
+    "audit-logging-framework"
+  ],
+  "author": "Varun Kumar <varunon9@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/varunon9/audit-logging-framework/issues"
+  },
+  "homepage": "https://github.com/varunon9/audit-logging-framework#readme",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.3",
+    "mongoose": "^5.2.17"
+  }
+}
