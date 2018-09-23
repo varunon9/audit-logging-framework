@@ -8,6 +8,7 @@ const http = require('http');
 
 require('../kafka/consumer');
 
+const logger = require('../modules/logger');
 const config = require('../config/');
 
 const mongoose = require('mongoose');
@@ -29,16 +30,16 @@ mongoose.connect(config.mongodbConnectionUrl + config.database, {
   useCreateIndex: true
 }, (err) => {
   if (err) {
-    console.error('Error connecting to db: ', err);
+    logger.error('Error connecting to db: ', err);
   } else {
-    console.info('Mongodb connection successful');
+    logger.info('Mongodb connection successful');
   }
 
   /**
    * Listen on provided port, on all network interfaces.
    */
   server.listen(port, function() {
-    console.info('Express server listening on port ' + server.address().port);
+    logger.info('Express server listening on port ' + server.address().port);
   });
 });
 
@@ -80,11 +81,11 @@ function onError(error) {
   // handle specific listen errors with friendly messages
   switch (error.code) {
     case 'EACCES':
-      console.error(bind + ' requires elevated privileges');
+      logger.error(bind + ' requires elevated privileges');
       process.exit(1);
       break;
     case 'EADDRINUSE':
-      console.error(bind + ' is already in use');
+      logger.error(bind + ' is already in use');
       process.exit(1);
       break;
     default:
@@ -100,5 +101,5 @@ function onListening() {
   const bind = typeof addr === 'string'
       ? 'pipe ' + addr
       : 'port ' + addr.port;
-  console.info('Listening on ' + bind);
+  logger.info('Listening on ' + bind);
 }

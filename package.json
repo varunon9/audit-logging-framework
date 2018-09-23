@@ -4,6 +4,7 @@
   "description": "An audit logging framework for MySql database.",
   "main": "./bin/www",
   "scripts": {
+    "start": "export NODE_ENV=production && node ./bin/www",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -27,6 +28,7 @@
   "homepage": "https://github.com/varunon9/audit-logging-framework#readme",
   "dependencies": {
     "body-parser": "^1.18.3",
+    "bunyan": "^1.8.12",
     "express": "^4.16.3",
     "kafka-node": "^3.0.1",
     "mongoose": "^5.2.17"

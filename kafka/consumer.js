@@ -1,6 +1,7 @@
 const kafka = require('kafka-node');
 
 const config = require('../config');
+const logger = require('../modules/logger');
 
 const client = new kafka.KafkaClient({
   kafkaHost: config.kafkaHost
@@ -21,16 +22,16 @@ process.on('SIGINT', () => {
 });
 
 consumer.on('error', (error) => {
-  console.error('consumer', error);
+  logger.error('consumer', error);
 });
 
 consumer.on('message', (message) => {
-  console.log('message', message);
+  logger.info('consumer message', message);
   consumer.commit((error, data) => {
     if (error) {
-      console.error(error);
+      logger.error('consumer.commit', error);
     } else {
-      console.log('Commit success: ', data);
+      logger.info('Commit success: ', data);
     }
   });
 });

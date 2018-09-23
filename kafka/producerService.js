@@ -1,6 +1,7 @@
 const kafka = require('kafka-node');
 
 const config = require('../config');
+const logger = require('../modules/logger');
 
 const client = new kafka.KafkaClient({
   kafkaHost: config.kafkaHost
@@ -8,11 +9,11 @@ const client = new kafka.KafkaClient({
 const producer = new kafka.Producer(client);
 
 producer.on('ready', () => {
-  console.log('Kafka Producer is connected and ready.');
+  logger.info('Kafka Producer is connected and ready.');
 });
 
 producer.on('error', (error) => {
-  console.error('producer', error);
+  logger.error('producer', error);
 });
 
 const producerService = {

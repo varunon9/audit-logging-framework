@@ -3,13 +3,14 @@ const router = express.Router();
 
 const producerService = require('../kafka/producerService');
 
+const logger = require('../modules/logger');
 const { requireParameters } = require('../middlewares');
 const auditLogController = require('../controllers');
 
 router.get('/', (req, res ) => {
   res.json({
     success: true,
-    message: 'Hello world'
+    message: 'audit log app is running.'
   })
 });
 
@@ -20,7 +21,7 @@ router.post('/auditLog',
 
   producerService.sendRecord(params, (data, error) => {
     if (error) {
-      console.error(error);
+      logger.error('producerService.sendRecord', error);
       res.json({
         success: false,
         message: error

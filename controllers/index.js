@@ -1,5 +1,6 @@
 const auditLogService = require('../services');
 const statusCode = require('../constants/statusCode');
+const logger = require('../modules/logger');
 
 module.exports = {
   createOrUpdate: async (params) => {
@@ -7,7 +8,7 @@ module.exports = {
       const auditLog = await auditLogService.createOrUpdate(params);
       return [auditLog, statusCode.OK];
     } catch (error) {
-      console.error(error);
+      logger.error('controller createOrUpdate', error);
       throw ([
         'Server side error', statusCode.INTERNAL_SERVER_ERROR
       ]);
