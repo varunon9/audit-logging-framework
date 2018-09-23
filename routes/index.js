@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
+const producerService = require('../kafka/producerService');
+
 const { requireParameters } = require('../middlewares');
 const auditLogController = require('../controllers');
 
@@ -15,7 +17,23 @@ router.post('/auditLog',
     requireParameters(['tableId', 'rowId']), (req, res) => {
 
   const params = req.body;
-  auditLogController.createOrUpdate(params)
+
+  producerService.sendRecord(params, (data, error) => {
+    if (error) {
+      console.error(error);
+      res.json({
+        success: false,
+        message: error
+      });
+    } else {
+      res.json({
+        success: true,
+        result: data
+      });
+    }
+  });
+
+  /*auditLogController.createOrUpdate(params)
     .then(([auditLog, responseCode]) => { 
       res.status(responseCode);
       res.json({
@@ -32,7 +50,13 @@ router.post('/auditLog',
         success: false,
         message: err
       });
-    });
+    });*/
+});
+
+router.get('/auditLog', (req, res) => {
+  res.json({
+    success: true
+  });
 });
 
 module.exports = router;

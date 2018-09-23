@@ -1,0 +1,37 @@
+version: '2'
+services:
+  zookeeper:
+    image: wurstmeister/zookeeper
+    ports:
+      - "2182:2181" # inside 2181, outside/published 2182 -> Host:Container (or just Container)
+  kafka:
+    image: wurstmeister/kafka
+    ports:
+      - "9093:9092" # inside 9092, outside/published 9093
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: 192.168.43.147 # Do not use localhost or 127.0.0.1 if you want to run multiple brokers
+      KAFKA_CREATE_TOPICS: "audit-logging:1:1" #1 partition and 1 replica
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2182
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+  auditLogApp:
+    restart: always
+    build: . # current directory contains a Dockerfile
+    ports:
+      - "5000:5000"
+    depends_on:
+      - kafka
+      - mongo
+    networks:
+      - backend
+  mongo:
+    image: mongo
+    volumes: 
+      - /var/lib/mongodb:/var/lib/mongodb # persistent storage
+    ports:
+      - "27018:27017"
+    networks:
+      - backend
+  networks:
+    - backend
+
