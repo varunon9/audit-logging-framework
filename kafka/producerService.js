@@ -6,6 +6,7 @@ const logger = require('../modules/logger');
 const client = new kafka.KafkaClient({
   kafkaHost: config.kafkaHost
 });
+
 const producer = new kafka.Producer(client);
 
 producer.on('ready', () => {

@@ -1,24 +1,47 @@
 version: '2'
+networks:
+  backend:
 services:
   zookeeper:
     image: wurstmeister/zookeeper
     ports:
-      - "2181:2181" # Host:Container (or just Container)
+      - "2182:2181" # Host:Container (or just Container)
+    networks:
+      - backend
   kafka:
     image: wurstmeister/kafka
     ports:
-      - "9092:9092"
+      - "9093:9092"
+    extra_hosts:
+      - "custom-localhost:10.106.105.121"
     environment:
-      KAFKA_ADVERTISED_HOST_NAME: localhost # Do not use localhost or 127.0.0.1 if you want to run multiple brokers
+      KAFKA_ADVERTISED_HOST_NAME: custom-localhost # Do not use localhost or 127.0.0.1 if you want to run multiple brokers
+
+      # audit-log app will create topic
       KAFKA_CREATE_TOPICS: "audit-logging:1:1" # 1 partition and 1 replica
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2182
+      KAFKA_ZOOKEEPER_CONNECT: custom-localhost:2182
+    depends_on:
+      - zookeeper
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - backend
+  # kafka:
+  #   image: spotify/kafka
+  #   ports:
+  #     - "9093:9092"
+  #   extra_hosts:
+  #     - "custom-localhost:10.106.105.121"
+  #   environment:
+  #     ADVERTISED_HOST: custom-localhost
+  #     TOPICS: "audit-logging"
   audit-log-app:
     restart: always
     build: . # current directory contains a Dockerfile
     ports:
       - "5000:5000"
+    extra_hosts:
+      - "custom-localhost:10.106.105.121"
     volumes:
       - ./logs:/usr/src/app/logs # to persist log files
     depends_on:
@@ -31,9 +54,7 @@ services:
     volumes: 
       - /var/lib/mongodb:/var/lib/mongodb # persistent storage
     ports:
-      - "27017:27017"
+      - "27018:27017"
     networks:
       - backend
-  networks:
-    - backend
 

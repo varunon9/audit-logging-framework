@@ -1,7 +1,7 @@
 {
   "name": "audit-logging",
   "version": "1.0.0",
-  "description": "An audit logging framework for MySql database.",
+  "description": "An audit logging framework for Relational databases.",
   "main": "./bin/www",
   "scripts": {
     "start": "export NODE_ENV=production && node ./bin/www",

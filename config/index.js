@@ -1,7 +1,10 @@
+/**
+ * custom-localhost will be created as /etc/hosts/ entry inside containers
+ * check docker-compose.yml
+ */
 module.exports = {
   database: 'auditLogging', // mongodb database
-  kafkaHost: 'localhost:9092', // kafka connection url
-  zookeeperConnectionString: 'localhost:2181',
-  mongodbConnectionUrl: 'mongodb://localhost:27017/',
-  kafkaTopic: 'test-kafka'//'audit-logging'
+  kafkaHost: 'custom-localhost:9092', // kafka connection url
+  mongodbConnectionUrl: 'mongodb://custom-localhost:27017/',
+  kafkaTopic: 'audit-logging'
 };
