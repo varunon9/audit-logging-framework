@@ -23,5 +23,22 @@ module.exports = {
     } catch (error) {
       throw error;
     }
+  },
+
+  get: async (params) => {
+    try {
+      const auditLog = await models.AuditLog.findOne({
+        tableId: params.tableId,
+        rowId: params.rowId
+      }, {
+        changeHistory: {
+          $slice: params.count ? params.count : 5 // by default top 5 change logs will be fetched
+        }
+      }).exec();
+
+      return auditLog;
+    } catch (error) {
+      throw error;
+    }
   }
 };
