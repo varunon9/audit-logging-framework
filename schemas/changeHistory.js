@@ -7,7 +7,7 @@ const changeHistorySchema = new Schema({
   date: {
     type: Date,
     required: true,
-    default: new Date()
+    default: () => { return new Date() }
   },
   log: {
     type: Object

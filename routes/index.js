@@ -15,7 +15,9 @@ router.get('/', (req, res ) => {
 });
 
 router.post('/auditLog', 
-    requireParameters(['tableId', 'rowId']), (req, res) => {
+    requireParameters(
+      ['tableId', 'rowId', 'oldData', 'newData']
+    ), (req, res) => {
 
   const params = req.body;
 

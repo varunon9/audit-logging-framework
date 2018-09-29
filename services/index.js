@@ -32,7 +32,7 @@ module.exports = {
         rowId: params.rowId
       }, {
         changeHistory: {
-          $slice: params.count ? params.count : 5 // by default top 5 change logs will be fetched
+          $slice: params.count ? parseInt(params.count) : 5 // by default top 5 change logs will be fetched
         }
       }).exec();
 

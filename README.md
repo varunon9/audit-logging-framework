@@ -111,3 +111,7 @@ This app has been developed to work with Relational databases. Its working can b
 9. Now come back to project installation directory and start app `npm start`
 10. Log data from your service class i.e. when data is created/updated in table. POST `localhost:5000/auditLog/`
 11. Retrieve data when showing audit-logs. GET `localhost:5000/auditLog`
+
+### Blog
+
+https://medium.com/@varunon9/an-audit-logging-framework-for-relational-databases-f902550cd849
