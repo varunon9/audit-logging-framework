@@ -52,26 +52,27 @@ This app has been developed to work with Relational databases. Its working can b
   This data is pushed to kafka for processing. Processing is basically calculating diff of **oldData** and **newData** and creating a new payload. This new payload is then stored to mongodb. Stored data would look like-
 
     {
-      _id : ObjectId(5ba698f0a5c65c3327f03b67),
-      updatedAt: ISODate('2018-09-22T19:34:50.887Z'),
-      createdAt: ISODate('2018-09-22T19:33:04.785Z'),
-      tableId: 1,
-      rowId: 1,
-      changeHistory: [
+      "_id" : ObjectId("5baf76b53b471c41857a1a0d"),
+      "rowId" : 1,
+      "tableId" : 1,
+      "updatedAt" : ISODate("2018-09-29T12:57:25.540Z"),
+      "__v" : 0,
+      "createdAt" : ISODate("2018-09-29T12:57:25.540Z"),
+      "changeHistory" : [
         {
-          log: {
-            name: 'varun kumar',
-            profession: 'software developer'
+          "date" : ISODate("2018-09-29T12:54:20.137Z"),
+          "_id" : ObjectId("5baf76b5e8480034fa2197ce"),
+          "ipAddress" : "localhost",
+          "user" : {
+            "email" : "varunon9@gmail.com"
           },
-          date: ISODate('2018-09-22T19:32:54.957Z'),
-          _id: ObjectId('5ba698f041c85339413f10e6'),
-          ipAddress: 'localhost',
-          user: {
-            email: 'varunon9@gmail.com'
+          "miscellaneous" : {
+            "platform" : "web",
+            "os" : "linux"
           },
-          miscellaneous: {
-            platform: 'web',
-            os: 'linux'
+          "log" : {
+            "name" : "varun kumar",
+            "profession" : "software developer"
           }
         }
       ]
