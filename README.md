@@ -7,7 +7,7 @@ An audit logging framework for Relational databases.
 You must have following softwares already setup-
 
 1. kafka (Pub-Sub model messaging system, a Big Data tool) 
-2. zookeeper (It is already shiped with kafka. Kafka uses ZooKeeper to manage the cluster)
+2. zookeeper (It is already shipped with kafka. Kafka uses ZooKeeper to manage the cluster)
 3. mongodb (To store audit logs data)
 4. node and npm (development and build environment)
 
@@ -24,26 +24,26 @@ This app has been developed to work with Relational databases. Its working can b
   request:
 
     {
-      tableId: 1,
-      rowId: 1,
-      oldData: {
-        id: 1,
-        name: 'varun',
-        age: 22,
-        profession: 'engineer'
+      "tableId": 1,
+      "rowId": 1,
+      "oldData": {
+        "id": 1,
+        "name": "varun",
+        "age": 22,
+        "profession": "engineer"
       },
-      newData: {
-        id: 1,
-        name: 'varun kumar',
-        profession: 'software developer'
+      "newData": {
+        "id": 1,
+        "name": "varun kumar",
+        "profession": "software developer"
       },
-      ipAddress: 'localhost',
-      user: {
-        email: 'varunon9@gmail.com'
+      "ipAddress": "localhost",
+      "user": {
+        "email": "varunon9@gmail.com"
       },
-      miscellaneous: {
-        platform: 'web',
-        os: 'linux'
+      "miscellaneous": {
+        "platform": "web",
+        "os": "linux"
       }
     }
 
@@ -90,7 +90,8 @@ This app has been developed to work with Relational databases. Its working can b
 
     GET http://localhost:5000/auditLog/?tableId=1&rowId=1&count=5
 
-  In response you would get *changeHistory* of give **tableId** and **rowId** with no of results = *count*
+  In response you would get *changeHistory* of given **tableId** and **rowId** with no of results = *count*.
+
   The data would be sorted according to data i.e. latest 5 results
   </dd>
 
@@ -101,6 +102,11 @@ This app has been developed to work with Relational databases. Its working can b
 1. Clone repo `git clone https://github.com/varunon9/audit-logging-framework.git`
 2. Go inside repo `cd audit-logging-framework`
 3. Edit `config/index.js` for connection details.
-4. Start the app `npm start`
-5. Log data from your service class i.e. when data is created/updated in table. POST `localhost:5000/auditLog`
-6. Retrieve data when showing audit-logs. GET `localhost:5000/auditLog`
+4. Go to kafka installation directory `cd /opt/kafka_2.11-1.0.0`
+5. First start zookeeper `sudo bin/zookeeper-server-start.sh config/zookeeper.properties`
+6. Start kafka `sudo bin/kafka-server-start.sh config/server.properties`
+7. You will have to create kafka-topic (name mentioned in `config/index.js`)
+8. create topic named audit-logging `bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic audit-logging`
+9. Now come back to project installation directory and start app `npm start`
+10. Log data from your service class i.e. when data is created/updated in table. POST `localhost:5000/auditLog/`
+11. Retrieve data when showing audit-logs. GET `localhost:5000/auditLog`

@@ -4,7 +4,7 @@
  */
 module.exports = {
   database: 'auditLogging', // mongodb database
-  kafkaHost: 'custom-localhost:9092', // kafka connection url
-  mongodbConnectionUrl: 'mongodb://custom-localhost:27017/',
+  kafkaHost: 'localhost:9092', // kafka connection url
+  mongodbConnectionUrl: 'mongodb://localhost:27017/',
   kafkaTopic: 'audit-logging'
 };

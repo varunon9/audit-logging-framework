@@ -2,46 +2,72 @@ const kafka = require('kafka-node');
 
 const config = require('../config');
 const logger = require('../modules/logger');
+const utility = require('./utility');
+const auditLogController = require('../controllers');
 
 const client = new kafka.KafkaClient({
   kafkaHost: config.kafkaHost
 });
 
-client.createTopics([{
-  topic: config.kafkaTopic,
-  partitions: 1,
-  replicationFactor: 1
-}], (error, result) => {
-  if (error) {
-    logger.error('client.createTopics', error);
+const consumer = new kafka.Consumer(client, [
+  {
+    topic: config.kafkaTopic
+  }
+], {
+  autoCommit: false
+});
+
+process.on('SIGINT', () => {
+  consumer.close(true, () => { // true -> commit the current offset 
+    process.exit();
+  });
+});
+
+consumer.on('error', (error) => {
+  logger.error('consumer error: ', error);
+});
+
+consumer.on('message', (message) => {
+  logger.debug('consumer message: ', message);
+  
+  // processing data
+  const params = JSON.parse(message.value);
+
+  const auditLog = {
+    tableId: params.tableId,
+    rowId: params.rowId,
+    changeHistory: {}
+  };
+
+  if (params.ipAddress) {
+    auditLog.changeHistory.ipAddress = params.ipAddress;
   }
 
-  const consumer = new kafka.Consumer(client, [
-    {
-      topic: config.kafkaTopic
-    }
-  ], {
-    autoCommit: false
-  });
+  if (params.user) {
+    auditLog.changeHistory.user = params.user;
+  }
 
-  process.on('SIGINT', () => {
-    consumer.close(true, () => { // true -> commit the current offset 
-      process.exit();
-    });
-  });
+  if (params.miscellaneous) {
+    auditLog.changeHistory.miscellaneous = params.miscellaneous;
+  }
 
-  consumer.on('error', (error) => {
-    logger.error('consumer error: ', error);
-  });
+  auditLog.changeHistory.log = 
+     utility.calculateDiff(params.oldData, params.newData);
 
-  consumer.on('message', (message) => {
-    logger.info('consumer message: ', message);
-    consumer.commit((error, data) => {
-      if (error) {
-        logger.error('consumer.commit: ', error);
-      } else {
-        logger.info('Commit success: ', data);
+  auditLogController.createOrUpdate(auditLog)
+    .then(([auditLog, responseCode]) => { 
+      logger.debug('saved log', auditLog);
+
+      consumer.commit((error, data) => {
+        if (error) {
+          logger.error('consumer.commit: ', error);
+        } else {
+          logger.debug('commit success: ', data);
+        }
+      });
+    }).catch(([err, responseCode]) => {
+      if (typeof(err) !== 'string') {
+        logger.error('consumer auditLogController.createOrUpdate', err);
       }
     });
-  });
 });
